@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "customers")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
 public class Customer extends BaseEntity {
