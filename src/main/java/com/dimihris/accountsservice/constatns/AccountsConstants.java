@@ -1,8 +1,8 @@
 package com.dimihris.accountsservice.constatns;
 
-public class AccountsConstatns {
+public class AccountsConstants {
 
-    private AccountsConstatns() {
+    private AccountsConstants() {
     }
 
     public static final String SAVINGS = "Savings";
