@@ -1,10 +1,12 @@
 package com.dimihris.accountsservice.service.impl;
 
 import com.dimihris.accountsservice.constatns.AccountsConstants;
+import com.dimihris.accountsservice.dto.CustomerAccountsDto;
 import com.dimihris.accountsservice.dto.CustomerDto;
 import com.dimihris.accountsservice.entity.Accounts;
 import com.dimihris.accountsservice.entity.Customer;
 import com.dimihris.accountsservice.exception.CustomerAlreadyExistsException;
+import com.dimihris.accountsservice.exception.ResourceNotFoundException;
 import com.dimihris.accountsservice.repository.AccountsRepository;
 import com.dimihris.accountsservice.repository.CustomerRepository;
 import com.dimihris.accountsservice.service.AccountsService;
@@ -12,7 +14,6 @@ import com.dimihris.accountsservice.util.mapper.CustomerMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Random;
 
 @AllArgsConstructor
@@ -38,6 +39,24 @@ public class AccountsServiceImpl implements AccountsService {
 
         Accounts newAccount = createNewAccount(savedCustomer);
         accountsRepository.save(newAccount);
+    }
+
+    @Override
+    public CustomerAccountsDto findAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString()));
+
+        return new CustomerAccountsDto(
+                customer.getName(),
+                customer.getEmail(),
+                customer.getMobileNumber(),
+                accounts.getAccountNumber().toString(),
+                accounts.getAccountType(),
+                accounts.getBranchAddress()
+        );
     }
 
     private Accounts createNewAccount(Customer customer) {
