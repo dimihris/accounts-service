@@ -5,10 +5,13 @@ import com.dimihris.accountsservice.dto.CustomerAccountsDto;
 import com.dimihris.accountsservice.dto.CustomerDto;
 import com.dimihris.accountsservice.dto.response.ResponseDto;
 import com.dimihris.accountsservice.service.AccountsService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
@@ -26,7 +30,7 @@ public class AccountsController {
     private AccountsService accountsService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createAccount(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
         accountsService.createAccount(customerDto);
 
         return ResponseEntity
@@ -35,7 +39,10 @@ public class AccountsController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<CustomerAccountsDto> findAccount(@RequestParam String mobileNumber) {
+    public ResponseEntity<CustomerAccountsDto> findAccount(@RequestParam
+                                                               @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                               String mobileNumber) {
+
         CustomerAccountsDto customerAccountsDto = accountsService.findAccount(mobileNumber);
 
         return ResponseEntity
@@ -44,7 +51,7 @@ public class AccountsController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDto> updateCustomerAccountDetails(@RequestBody CustomerAccountsDto customerAccountsDto) {
+    public ResponseEntity<ResponseDto> updateCustomerAccountDetails(@Valid @RequestBody CustomerAccountsDto customerAccountsDto) {
         boolean isUpdated = accountsService.updateCustomerAccountDetails(customerAccountsDto);
 
         if (isUpdated) {
@@ -59,7 +66,9 @@ public class AccountsController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam String mobileNumber) {
+    public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
+                                                                @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                                                String mobileNumber) {
         boolean isDeleted = accountsService.deleteAccount(mobileNumber);
 
         if (isDeleted) {
