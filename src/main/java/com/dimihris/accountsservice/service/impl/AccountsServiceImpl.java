@@ -10,6 +10,7 @@ import com.dimihris.accountsservice.exception.ResourceNotFoundException;
 import com.dimihris.accountsservice.repository.AccountsRepository;
 import com.dimihris.accountsservice.repository.CustomerRepository;
 import com.dimihris.accountsservice.service.AccountsService;
+import com.dimihris.accountsservice.util.mapper.CustomerAccountsMapper;
 import com.dimihris.accountsservice.util.mapper.CustomerMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,23 @@ public class AccountsServiceImpl implements AccountsService {
                 accounts.getAccountType(),
                 accounts.getBranchAddress()
         );
+    }
+
+    @Override
+    public boolean updateCustomerAccountDetails(CustomerAccountsDto customerAccountsDto) {
+        Accounts accounts = accountsRepository.findById(Long.parseLong(customerAccountsDto.getAccountNumber()))
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "accountNumber", customerAccountsDto.getAccountNumber()));
+
+        CustomerAccountsMapper.mapToAccount(customerAccountsDto, accounts);
+        accountsRepository.save(accounts);
+
+        Customer customer = customerRepository.findById(accounts.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", accounts.getCustomerId().toString()));
+
+        CustomerAccountsMapper.mapToCustomer(customerAccountsDto, customer);
+        customerRepository.save(customer);
+
+        return true;
     }
 
     private Accounts createNewAccount(Customer customer) {

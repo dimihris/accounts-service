@@ -8,4 +8,6 @@ public interface AccountsService {
     void createAccount(CustomerDto customerDto);
 
     CustomerAccountsDto findAccount(String mobileNumber);
+
+    boolean updateCustomerAccountDetails(CustomerAccountsDto customerAccountsDto);
 }
