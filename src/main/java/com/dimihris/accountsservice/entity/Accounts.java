@@ -15,7 +15,7 @@ import lombok.ToString;
 @Table(name = "accounts")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
-public class Accounts {
+public class Accounts extends BaseEntity{
 
     @Column(name = "customer_id", updatable = false)
     private Long customerId;
