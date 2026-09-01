@@ -148,7 +148,7 @@ public class AccountsController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
+                    responseCode = "417",
                     description = "Unable to update customer account details",
                     content = @Content(
                             schema = @Schema(implementation = ResponseDto.class)
@@ -172,10 +172,10 @@ public class AccountsController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.EXPECTATION_FAILED)
                 .body(new ResponseDto(
-                        AccountsConstants.STATUS_500,
-                        AccountsConstants.MESSAGE_500
+                        AccountsConstants.STATUS_417,
+                        AccountsConstants.MESSAGE_417_UPDATE
                 ));
     }
 
@@ -206,7 +206,7 @@ public class AccountsController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
+                    responseCode = "417",
                     description = "Unable to delete customer account",
                     content = @Content(
                             schema = @Schema(implementation = ResponseDto.class)
@@ -238,10 +238,10 @@ public class AccountsController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.EXPECTATION_FAILED)
                 .body(new ResponseDto(
-                        AccountsConstants.STATUS_500,
-                        AccountsConstants.MESSAGE_500
+                        AccountsConstants.STATUS_417,
+                        AccountsConstants.MESSAGE_417_DELETE
                 ));
     }
 }
