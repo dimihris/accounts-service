@@ -1,6 +1,7 @@
 package com.dimihris.accountsservice.controller;
 
 import com.dimihris.accountsservice.constatns.AccountsConstants;
+import com.dimihris.accountsservice.dto.AccountContactInfoDto;
 import com.dimihris.accountsservice.dto.CustomerAccountsDto;
 import com.dimihris.accountsservice.dto.CustomerDto;
 import com.dimihris.accountsservice.dto.response.ErrorResponseDto;
@@ -44,6 +45,8 @@ public class AccountsController {
     private final AccountsService accountsService;
 
     private final Environment environment;
+
+    private final AccountContactInfoDto accountContactInfoDto;
 
     @Value("${build.version}")
     private String buildVersion;
@@ -298,5 +301,12 @@ public class AccountsController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountContactInfoDto> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountContactInfoDto);
     }
 }
