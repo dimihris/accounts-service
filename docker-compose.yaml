@@ -17,7 +17,11 @@ services:
     image: mysql
     container_name: accounts-db
     ports:
-      - 3306:3306
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
@@ -34,7 +38,11 @@ services:
     image: mysql
     container_name: loans-db
     ports:
-      - 3307:3306
+      - "3307:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
@@ -51,7 +59,11 @@ services:
     image: mysql
     container_name: cards-db
     ports:
-      - 3308:3306
+      - "3308:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
