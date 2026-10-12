@@ -7,6 +7,7 @@ import com.dimihris.accountsservice.dto.CustomerDto;
 import com.dimihris.accountsservice.dto.response.ErrorResponseDto;
 import com.dimihris.accountsservice.dto.response.ResponseDto;
 import com.dimihris.accountsservice.service.AccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -313,6 +314,7 @@ public class AccountsController {
                     )
             )
     })
+    @RateLimiter(name = "getJavaVersion")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
